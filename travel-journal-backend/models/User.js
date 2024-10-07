@@ -6,6 +6,7 @@ const userSchema = new Schema({
   lastName: { type: String, required: [true, 'Lastname is required'] },
   email: { type: String, required: [true, 'Email image is required'], unique: true },
   password: { type: String, required: [true, 'Password is required'], select: false },
+  role : { type: String, enum: ['user', 'admin'], default: 'user' },
   createdAt: { type: Date, default: Date.now }
 });
 

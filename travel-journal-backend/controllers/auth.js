@@ -16,7 +16,7 @@ export const signUp = asyncHandler(async (req, res, next) => {
     if (!newUser) throw new ErrorResponse("Error creating user", 500);
 
     const secret = process.env.JWT_SECRET; // This will come from the server environment
-    const payload = { userId: newUser.id }; // The data we want to enclose in the JWT
+    const payload = { userId: newUser.id, userRole: newUser.role }; // The data we want to enclose in the JWT
     const tokenOptions = { expiresIn: "6d" }; // We will limit the dura
     const token = jwt.sign(payload, secret, tokenOptions);
 
@@ -26,7 +26,7 @@ export const signUp = asyncHandler(async (req, res, next) => {
       sameSite: isProduction ? "None" : "Lax",
       secure: isProduction,
     };
-    res.cookie("token", token, cookieOptions);
+    res.cookie("auth", token, cookieOptions);
     res.status(201).json({ success: "User successfully created." });
     // res.json({ token });
   } catch (error) {
@@ -43,7 +43,7 @@ export const signIn = asyncHandler(async (req, res, next) => {
     const isPasswordValid = await bcrypt.compare(body.password, user.password);
     if (!isPasswordValid) throw new ErrorResponse("Invalid credentials", 401);
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: user.id, userRole: user.role }, process.env.JWT_SECRET, {
       expiresIn: "6d",
     });
     const isProduction = process.env.NODE_ENV === "production";
@@ -52,7 +52,7 @@ export const signIn = asyncHandler(async (req, res, next) => {
       sameSite: isProduction ? "None" : "Lax",
       secure: isProduction,
     };
-    res.cookie("token", token, cookieOptions);
+    res.cookie("auth", token, cookieOptions);
     res.status(200).json({ success: "User successfully logged in." });
   } catch (error) {
     next(error);
@@ -61,7 +61,7 @@ export const signIn = asyncHandler(async (req, res, next) => {
 
 export const me = asyncHandler(async (req, res, next) => {
   try {
-    const { userId } = req; // This is coming from the verifyTokenMiddleware
+    const { userId, userRole } = req; // This is coming from the verifyTokenMiddleware
     console.log(userId);
     
     const user = await User.findById(userId).select("-password");
@@ -69,7 +69,7 @@ export const me = asyncHandler(async (req, res, next) => {
 
     const { firstName, lastName, email } = user;
 
-    res.status(200).json({ firstName, lastName, email });
+    res.status(200).json({ firstName, lastName, email, userRole });
   } catch (error) {
     next(error);
   }
