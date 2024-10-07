@@ -7,7 +7,7 @@ import verifyTokenMiddleware from "../middlewares/verifyTokenMiddleware.js";
 const authRouter = Router();
 
 authRouter.route('/signup').post(validateJOI(userSchema), signUp);
-authRouter.route('/signin').post(validateJOI(userSchema), signIn);
+authRouter.route('/signin').post(signIn);
 authRouter.route('/me').get(verifyTokenMiddleware, me);
 
 export default authRouter;
