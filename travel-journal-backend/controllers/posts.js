@@ -9,9 +9,12 @@ export const getAllPosts = asyncHandler(async (req, res, next) => {
 });
 
 export const createPost = asyncHandler(async (req, res, next) => {
-  const { body, userId } = req;
+  const {
+    body: { title, image, content },
+  } = req;
+  const author = req.userId;
   const newPost = await (
-    await Post.create({ ...body, userId })
+    await Post.create({ title, author, image, content })
   ).populate("author");
   res.status(201).json(newPost);
 });
@@ -21,7 +24,7 @@ export const getSinglePost = asyncHandler(async (req, res, next) => {
     params: { id },
   } = req;
   if (!isValidObjectId(id)) throw new ErrorResponse("Invalid id", 400);
-  
+
   const post = await Post.findById(id).populate("author");
   if (!post)
     throw new ErrorResponse(`Post with id of ${id} doesn't exist`, 404);
@@ -30,11 +33,13 @@ export const getSinglePost = asyncHandler(async (req, res, next) => {
 
 export const updatePost = asyncHandler(async (req, res, next) => {
   const {
-    body,
+    body: { title, image, content },
     params: { id },
     userId,
     userRole,
   } = req;
+  const author = req.userId;
+
   if (!isValidObjectId(id)) throw new ErrorResponse("Invalid id", 400);
 
   const postToBeUpdated = await Post.findById(id).populate("author");
@@ -42,7 +47,7 @@ export const updatePost = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse(`Post with id of ${id} doesn't exist`, 404);
 
   if (userId === postToBeUpdated.author.id || userRole === "admin") {
-    const updatedPost = await Post.findByIdAndUpdate(id, body, {
+    const updatedPost = await Post.findByIdAndUpdate(id, title, author, image, content, {
       new: true,
     }).populate("author");
     res.status(201).json(updatedPost);

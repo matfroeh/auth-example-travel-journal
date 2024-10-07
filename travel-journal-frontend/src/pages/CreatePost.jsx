@@ -18,7 +18,7 @@ const CreatePost = () => {
   const handleSubmit = async e => {
     try {
       e.preventDefault();
-      if (!title || !author || !image || !content) throw new Error('All fields are required');
+      if (!title || !image || !content) throw new Error('All fields are required');
       setLoading(true);
       const newPost = await createPost({ title, author, image, content });
       setForm({ title: '', author: '', image: '', content: '' });

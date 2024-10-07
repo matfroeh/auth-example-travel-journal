@@ -31,6 +31,7 @@ export const getSinglePost = async id => {
 export const createPost = async formData => {
   const res = await fetch(baseURL, {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
