@@ -34,7 +34,7 @@ export const signUp = asyncHandler(async (req, res, next) => {
     };
     res
       .cookie("auth", token, tokenCookieOptions)
-      .cookie("checkCookie", checkCookieValue, checkCookieOptions);
+      .cookie("checkCookie", checkCookieValue, checkCookieOptions); // not used in the frontend by now
     res.status(201).json({ success: "User successfully created." });
   } catch (error) {
     next(error);
