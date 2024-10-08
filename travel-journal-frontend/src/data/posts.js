@@ -47,3 +47,19 @@ export const createPost = async formData => {
   const data = await res.json();
   return data;
 };
+
+export const deletePost = async id => {
+  const res = await fetch(`${baseURL}/${id}`, {
+    method: 'DELETE',
+    credentials: 'include'
+  });
+  if (!res.ok) {
+    const errorData = await res.json();
+    if (!errorData.error) {
+      throw new Error('An error occurred while deleting the post');
+    }
+    throw new Error(errorData.error);
+  }
+  const data = await res.json();
+  return data;
+};

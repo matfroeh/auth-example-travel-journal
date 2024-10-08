@@ -7,14 +7,13 @@ export const userSchema = Joi.object({
   password: Joi.string().min(8).max(20).required()
 });
 
-export const siginSchema = Joi.object({
+export const signinSchema = Joi.object({
   email: Joi.string().required(),
-  password: Joi.string().alphanum().min(8).max(12).required()
+  password: Joi.string().min(8).max(20).required()
 });
 
 export const postSchema = Joi.object({
   title: Joi.string().required(),
   image: Joi.string().required(),
   content: Joi.string().required(),
-  author: Joi.string()
 });

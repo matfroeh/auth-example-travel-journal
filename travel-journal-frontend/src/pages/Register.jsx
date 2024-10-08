@@ -25,9 +25,9 @@ const Register = () => {
         throw new Error('All fields are required');
       if (password !== confirmPassword) throw new Error('Passwords do not match');
       setLoading(true);
-      const user = await signUp({ firstName, lastName, email, password });
+      await signUp({ firstName, lastName, email, password });
       setCheckSession((prev) => !prev);
-      toast.success(`Welcome, ${user.firstName}!`);
+      toast.success("Successfully registered!");
       navigate('/');
     } catch (error) {
       toast.error(error.message);

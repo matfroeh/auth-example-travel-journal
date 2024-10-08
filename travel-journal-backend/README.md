@@ -11,6 +11,10 @@ Starter code for authentication/authorization module at WBS Coding School
 - create a `.env` file with variables:
   - `MONGO_URI` set to a valid MongoDB connection string.
   - `PORT` ONLY in case you want to override the default `8000`
+  - `FRONTEND_URL` add your frontend url to the .env to allow cookie handling (just for demo in development)
+- user roles:
+  - default: [user] can only delete and update his own posts
+  - [admin] cab delete and update any post. Must be set manually via your database management software for now.
 
 ## Commands
 

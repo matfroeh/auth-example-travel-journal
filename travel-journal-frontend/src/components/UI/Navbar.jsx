@@ -6,10 +6,14 @@ import { logout } from "@/data/auth";
 const Navbar = () => {
   const { auth, user, setCheckSession } = useAuth();
 
-  const handleLogOut = () => {
-    logout(); // this handles deleting the cookie by the API
-    setCheckSession((prev) => !prev); 
-    toast.success("Successfully logged out!");
+  const handleLogOut = async () => {
+    try {
+      await logout();  // this handles deleting the cookie by the API
+      setCheckSession((prev) => !prev);
+      toast.success("Successfully logged out!");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
