@@ -58,3 +58,19 @@ export const checkAuth = async () => {
   const data = await res.json();
   return data;
 };
+
+export const logout = async () => {
+  const res = await fetch(`${baseURL}/logout`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const errorData = await res.json();
+    if (!errorData.error) {
+      throw new Error("An error occurred while logging out");
+    }
+    throw new Error(errorData.error);
+  }
+  const data = await res.json();
+  return data;
+};

@@ -5,7 +5,7 @@ import { signUp } from '@/data';
 import { useAuth } from '@/context';
 
 const Register = () => {
-  const { setAuth, setCheckSession } = useAuth();
+  const { setCheckSession } = useAuth();
   const [{ firstName, lastName, email, password, confirmPassword }, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -25,13 +25,10 @@ const Register = () => {
         throw new Error('All fields are required');
       if (password !== confirmPassword) throw new Error('Passwords do not match');
       setLoading(true);
-      // console.log(firstName, lastName, email, password, confirmPassword);
       const user = await signUp({ firstName, lastName, email, password });
+      setCheckSession((prev) => !prev);
       toast.success(`Welcome, ${user.firstName}!`);
-      // setAuth(true);
-      setCheckSession(false);
       navigate('/');
-      // console.log(user);
     } catch (error) {
       toast.error(error.message);
     } finally {

@@ -19,14 +19,22 @@ export const signUp = asyncHandler(async (req, res, next) => {
     const payload = { userId: newUser.id, userRole: newUser.role }; // The data we want to enclose in the JWT
     const tokenOptions = { expiresIn: "6d" }; // We will limit the dura
     const token = jwt.sign(payload, secret, tokenOptions);
+    const checkCookieValue = true;
 
     const isProduction = process.env.NODE_ENV === "production";
-    const cookieOptions = {
+    const tokenCookieOptions = {
       httpOnly: true,
       sameSite: isProduction ? "None" : "Lax",
       secure: isProduction,
     };
-    res.cookie("auth", token, cookieOptions);
+    const checkCookieOptions = {
+      expires: new Date(Date.now() + 60 * 60 * 10000),
+      sameSite: isProduction ? "None" : "Lax",
+      secure: isProduction,
+    };
+    res
+      .cookie("auth", token, tokenCookieOptions)
+      .cookie("checkCookie", checkCookieValue, checkCookieOptions);
     res.status(201).json({ success: "User successfully created." });
     // res.json({ token });
   } catch (error) {
@@ -43,16 +51,29 @@ export const signIn = asyncHandler(async (req, res, next) => {
     const isPasswordValid = await bcrypt.compare(body.password, user.password);
     if (!isPasswordValid) throw new ErrorResponse("Invalid credentials", 401);
 
-    const token = jwt.sign({ userId: user.id, userRole: user.role }, process.env.JWT_SECRET, {
-      expiresIn: "6d",
-    });
+    const token = jwt.sign(
+      { userId: user.id, userRole: user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "6d",
+      }
+    );
+    const checkCookieValue = true;
+
     const isProduction = process.env.NODE_ENV === "production";
-    const cookieOptions = {
+    const tokenCookieOptions = {
       httpOnly: true,
       sameSite: isProduction ? "None" : "Lax",
       secure: isProduction,
     };
-    res.cookie("auth", token, cookieOptions);
+    const checkCookieOptions = {
+      expires: new Date(Date.now() + 60 * 60 * 10000),
+      sameSite: isProduction ? "None" : "Lax",
+      secure: isProduction,
+    };
+    res
+      .cookie("auth", token, tokenCookieOptions)
+      .cookie("checkCookie", checkCookieValue, checkCookieOptions);
     res.status(200).json({ success: "User successfully logged in." });
   } catch (error) {
     next(error);
@@ -62,14 +83,24 @@ export const signIn = asyncHandler(async (req, res, next) => {
 export const me = asyncHandler(async (req, res, next) => {
   try {
     const { userId, userRole } = req; // This is coming from the verifyTokenMiddleware
-    console.log(userId);
-    
+
     const user = await User.findById(userId).select("-password");
     if (!user) throw new ErrorResponse("User not found", 404);
 
     const { firstName, lastName, email } = user;
 
-    res.status(200).json({ firstName, lastName, email, userRole });
+    res.status(200).json({ userId, firstName, lastName, email, userRole });
+  } catch (error) {
+    next(error);
+  }
+});
+
+export const logout = asyncHandler(async (req, res, next) => {
+  try {
+    res
+      .clearCookie("auth")
+      .clearCookie("checkCookie")
+      .json({ success: "User successfully logged out." });
   } catch (error) {
     next(error);
   }

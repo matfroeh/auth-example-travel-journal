@@ -5,6 +5,7 @@ import { checkAuth } from "@/data";
 import { toast } from "react-toastify";
 import { AuthContext } from "./AuthContext";
 
+// this could be used instead of the checkSession state
 // const cookies = new Cookies();
 // const checkCookie = cookies.get("checkCookie");
 
@@ -13,26 +14,16 @@ const AuthContextProvider = ({ children }) => {
   const [auth, setAuth] = useState(false);
   const [checkSession, setCheckSession] = useState(true);
 
-  console.log("CheckSession:", checkSession);
-
+  // will be used as a toggle effect
   useEffect(() => {
-    // if (!checkSession) {
-    //   // API call to remove cookie
-    //   // setAuth(false);
-    //   // setUser(null);
-    //   return
-    // }
     const checkToken = async () => {
-      console.log("Checking token called");
-      
       await checkAuth()
         .then((user) => {
           setUser(user);
           setAuth(true);
           toast.success(`Welcome back, ${user.firstName}!`);
         })
-        .catch((err) => {
-          toast.error(err.message);
+        .catch(() => {
           setAuth(false);
           setUser(null);
         });

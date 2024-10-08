@@ -10,7 +10,7 @@ const Login = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-  const { auth, setAuth, setCheckSession } = useAuth();
+  const { auth, setCheckSession } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -21,8 +21,7 @@ const Login = () => {
       if (!email || !password) throw new Error('All fields are required');
       setLoading(true);
       await signIn({ email, password });
-      // setAuth(true);
-      setCheckSession(false);
+      setCheckSession((prev) => !prev);
       toast.success(`Successfully logged in!`);
       navigate('/');
     } catch (error) {

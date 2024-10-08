@@ -1,19 +1,16 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "@/context";
 import { toast } from "react-toastify";
+import { logout } from "@/data/auth";
 
 const Navbar = () => {
-  const { auth, setAuth, user, setUser, setCheckSession } = useAuth();
+  const { auth, user, setCheckSession } = useAuth();
 
   const handleLogOut = () => {
-    // this will be handled by deleting the cookie by the API
-    setAuth(false);
-    setUser(null);
-    // setCheckSession(true); 
-
+    logout(); // this handles deleting the cookie by the API
+    setCheckSession((prev) => !prev); 
     toast.success("Successfully logged out!");
   };
-
 
   return (
     <div className="navbar bg-base-100">
