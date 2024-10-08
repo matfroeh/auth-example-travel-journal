@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { signIn } from '@/data';
+import { useAuth } from '@/context';
 
 const Login = () => {
   const [{ email, password }, setForm] = useState({
@@ -9,6 +10,8 @@ const Login = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
+  const { auth, setAuth, setCheckSession } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
@@ -17,15 +20,19 @@ const Login = () => {
       e.preventDefault();
       if (!email || !password) throw new Error('All fields are required');
       setLoading(true);
-      const user = await signIn({ email, password });
-      console.log(user);
-      // console.log(email, password);
+      await signIn({ email, password });
+      // setAuth(true);
+      setCheckSession(false);
+      toast.success(`Successfully logged in!`);
+      navigate('/');
     } catch (error) {
       toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  if (auth) return <Navigate to='/' replace />;
 
   return (
     <form className='my-5 md:w-1/2 mx-auto flex flex-col gap-3' onSubmit={handleSubmit}>

@@ -42,3 +42,19 @@ export const signIn = async (formData) => {
   const data = await res.json();
   return data;
 };
+
+export const checkAuth = async () => {
+  const res = await fetch(`${baseURL}/me`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const errorData = await res.json();
+    if (!errorData.error) {
+      throw new Error("An error occurred while checking authentication");
+    }
+    throw new Error(errorData.error);
+  }
+  const data = await res.json();
+  return data;
+};

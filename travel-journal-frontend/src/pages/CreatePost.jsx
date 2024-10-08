@@ -5,9 +5,8 @@ import { createPost } from '@/data';
 
 const CreatePost = () => {
   const navigate = useNavigate();
-  const [{ title, author, image, content }, setForm] = useState({
+  const [{ title, image, content }, setForm] = useState({
     title: '',
-    author: '',
     image: '',
     content: ''
   });
@@ -20,8 +19,8 @@ const CreatePost = () => {
       e.preventDefault();
       if (!title || !image || !content) throw new Error('All fields are required');
       setLoading(true);
-      const newPost = await createPost({ title, author, image, content });
-      setForm({ title: '', author: '', image: '', content: '' });
+      const newPost = await createPost({ title, image, content });
+      setForm({ title: '', image: '', content: '' });
       navigate(`/post/${newPost._id}`);
     } catch (error) {
       toast.error(error.message);
@@ -40,16 +39,6 @@ const CreatePost = () => {
             value={title}
             onChange={handleChange}
             placeholder='A title for your post...'
-            className='input input-bordered w-full'
-          />
-        </label>
-        <label className='form-control grow'>
-          <div className='label-text'>Author</div>
-          <input
-            name='author'
-            value={author}
-            onChange={handleChange}
-            placeholder='Your name...'
             className='input input-bordered w-full'
           />
         </label>

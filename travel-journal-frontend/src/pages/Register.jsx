@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { signUp } from '@/data';
+import { useAuth } from '@/context';
 
 const Register = () => {
+  const { setAuth, setCheckSession } = useAuth();
   const [{ firstName, lastName, email, password, confirmPassword }, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -12,6 +14,7 @@ const Register = () => {
     confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
@@ -24,7 +27,11 @@ const Register = () => {
       setLoading(true);
       // console.log(firstName, lastName, email, password, confirmPassword);
       const user = await signUp({ firstName, lastName, email, password });
-      console.log(user);
+      toast.success(`Welcome, ${user.firstName}!`);
+      // setAuth(true);
+      setCheckSession(false);
+      navigate('/');
+      // console.log(user);
     } catch (error) {
       toast.error(error.message);
     } finally {
