@@ -11,6 +11,7 @@ const verifyTokenMiddleware = (req, res, next) => {
     
     const secret = process.env.JWT_SECRET; // This will come from the server environment
     const { userId, userRole } = jwt.verify(token, secret); // Get the payload if verification is successful
+    if (!userId) throw new ErrorResponse("Unauthorized", 401);
 
     req.userId = userId; // Create property in request object
     req.userRole = userRole; 
@@ -18,6 +19,8 @@ const verifyTokenMiddleware = (req, res, next) => {
     
     next(); // Call next handler
   } catch (e) {
+    console.log(e);
+    
     next(e);
   }
 };

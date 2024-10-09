@@ -32,10 +32,12 @@ export const signUp = asyncHandler(async (req, res, next) => {
       sameSite: isProduction ? "None" : "Lax",
       secure: isProduction,
     };
+
+    const { firstName, lastName, email } = newUser;
     res
       .cookie("auth", token, tokenCookieOptions)
       .cookie("checkCookie", checkCookieValue, checkCookieOptions); // not used in the frontend by now
-    res.status(201).json({ success: "User successfully created." });
+    res.status(201).json({ success: "User successfully created.", data: {firstName, lastName, email } });
   } catch (error) {
     next(error);
   }
@@ -70,10 +72,12 @@ export const signIn = asyncHandler(async (req, res, next) => {
       sameSite: isProduction ? "None" : "Lax",
       secure: isProduction,
     };
+    
+    const { firstName, lastName, email } = user;
     res
       .cookie("auth", token, tokenCookieOptions)
       .cookie("checkCookie", checkCookieValue, checkCookieOptions);
-    res.status(200).json({ success: "User successfully logged in." });
+    res.status(200).json({ success: "User successfully logged in.", data: { firstName, lastName, email } });
   } catch (error) {
     next(error);
   }

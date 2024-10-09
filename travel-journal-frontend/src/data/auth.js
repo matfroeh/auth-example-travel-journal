@@ -19,8 +19,7 @@ export const signUp = async (formData) => {
     }
     throw new Error(errorData.error);
   }
-  const data = await res.json();
-  return data;
+  return await res.json();
 };
 
 export const signIn = async (formData) => {
@@ -34,13 +33,14 @@ export const signIn = async (formData) => {
   });
   if (!res.ok) {
     const errorData = await res.json();
+    console.log(errorData);
+
     if (!errorData.error) {
       throw new Error("An error occurred while signing in");
     }
     throw new Error(errorData.error);
   }
-  const data = await res.json();
-  return data;
+  return await res.json();
 };
 
 export const checkAuth = async () => {
@@ -55,8 +55,7 @@ export const checkAuth = async () => {
     }
     throw new Error(errorData.error);
   }
-  const data = await res.json();
-  return data;
+  return await res.json();
 };
 
 export const logout = async () => {
@@ -71,6 +70,5 @@ export const logout = async () => {
     }
     throw new Error(errorData.error);
   }
-  const data = await res.json();
-  return data;
+  return await res.json();
 };

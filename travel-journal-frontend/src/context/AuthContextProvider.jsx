@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 // import Cookies from "universal-cookie";
 import { checkAuth } from "@/data";
-import { toast } from "react-toastify";
 import { AuthContext } from "./AuthContext";
 
 // this could be used instead of the checkSession state
@@ -16,12 +15,13 @@ const AuthContextProvider = ({ children }) => {
 
   // will be used as a toggle effect
   useEffect(() => {
+    console.log("checkSession called");
+    
     const checkToken = async () => {
       await checkAuth()
         .then((user) => {
           setUser(user);
           setAuth(true);
-          toast.success(`Welcome back, ${user.firstName}!`);
         })
         .catch(() => {
           setAuth(false);
@@ -32,7 +32,11 @@ const AuthContextProvider = ({ children }) => {
   }, [checkSession]);
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth, user, setUser, setCheckSession }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{ auth, setAuth, user, setUser, setCheckSession }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 

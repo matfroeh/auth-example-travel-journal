@@ -21,7 +21,7 @@ const Login = () => {
       e.preventDefault();
       if (!email || !password) throw new Error("All fields are required");
       setLoading(true);
-      await signIn({ email, password });
+      await signIn({ email, password });     
       setCheckSession((prev) => !prev);
       toast.success(`Successfully logged in!`);
       navigate("/");
@@ -31,8 +31,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-
-  // if (auth) return <Navigate to='/' replace />;
 
   if (auth) return <Navigate to={location.state?.next || "/"} />;
 
