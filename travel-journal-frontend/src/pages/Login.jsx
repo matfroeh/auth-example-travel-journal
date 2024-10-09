@@ -22,7 +22,7 @@ const Login = () => {
       if (!email || !password) throw new Error("All fields are required");
       setLoading(true);
       await signIn({ email, password });     
-      setCheckSession((prev) => !prev);
+      setCheckSession(true);
       toast.success(`Successfully logged in!`);
       navigate("/");
     } catch (error) {

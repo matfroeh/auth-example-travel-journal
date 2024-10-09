@@ -31,7 +31,7 @@ const Register = () => {
       }
       setLoading(true);
       await signUp({ firstName, lastName, email, password });
-      setCheckSession((prev) => !prev);
+      setCheckSession(true);
       toast.success("Successfully registered!");
       navigate("/");
     } catch (error) {

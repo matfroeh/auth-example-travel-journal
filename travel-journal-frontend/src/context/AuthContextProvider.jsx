@@ -26,6 +26,8 @@ const AuthContextProvider = ({ children }) => {
         .catch(() => {
           setAuth(false);
           setUser(null);
+        }).finally(() => {
+          setCheckSession(false);
         });
     };
     checkToken();

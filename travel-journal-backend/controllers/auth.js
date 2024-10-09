@@ -26,11 +26,13 @@ export const signUp = asyncHandler(async (req, res, next) => {
       httpOnly: true,
       sameSite: isProduction ? "None" : "Lax",
       secure: isProduction,
+      // overwrite: true,
     };
     const checkCookieOptions = {
       expires: new Date(Date.now() + 60 * 60 * 10000),
       sameSite: isProduction ? "None" : "Lax",
       secure: isProduction,
+      // overwrite: true,
     };
 
     const { firstName, lastName, email } = newUser;
@@ -66,11 +68,13 @@ export const signIn = asyncHandler(async (req, res, next) => {
       httpOnly: true,
       sameSite: isProduction ? "None" : "Lax",
       secure: isProduction,
+      // overwrite: true,
     };
     const checkCookieOptions = {
       expires: new Date(Date.now() + 60 * 60 * 10000),
       sameSite: isProduction ? "None" : "Lax",
       secure: isProduction,
+      // overwrite: true,
     };
     
     const { firstName, lastName, email } = user;
